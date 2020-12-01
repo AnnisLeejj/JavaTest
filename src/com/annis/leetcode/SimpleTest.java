@@ -1,5 +1,8 @@
 package com.annis.leetcode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SimpleTest {
     static SimpleTest simpleTest = new SimpleTest();
 
@@ -7,13 +10,175 @@ public class SimpleTest {
 //        String binary = simpleTest.addBinary2("11", "1");
 //        System.out.println(binary);
         //System.out.println(simpleTest.maxProfit1(new int[]{7, 1, 5, 3, 6, 4}));
-        String s = Integer.toBinaryString(1);
-        String s1 = Integer.toBinaryString(-1);
-        System.out.println(s);
-        System.out.println(s1);
+//        String s = Integer.toBinaryString(1);
+//        String s1 = Integer.toBinaryString(-1);
+//        System.out.println(s);
+//        System.out.println(s1);
 
-        System.out.println(simpleTest.add(1, 0));
+//        System.out.println(simpleTest.add(1, 0));
+
+//        System.out.println(simpleTest.sortString("eabcddcba"));
+        simpleTest.treeNode();
     }
+
+    /**
+     * 给定一个二叉树，判断它是否是高度平衡的二叉树。
+     * <p>
+     * 本题中，一棵高度平衡二叉树定义为：
+     * <p>
+     * 一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+     */
+    private void treeNode() {
+        TreeNode root = new TreeNode(1);
+        //----------左
+        root.left = new TreeNode(2);
+        root.left.right = new TreeNode(3);
+        root.left.right.left = new TreeNode(4);
+        root.left.right.left.right = new TreeNode(5);
+        root.left.right.left.right.left = new TreeNode(6);
+        //----------右
+        root.right = new TreeNode(2);
+        root.right.left = new TreeNode(3);
+        root.right.left.right = new TreeNode(4);
+        root.right.left.right.right = new TreeNode(5);
+
+        System.out.println(isBalanced(root) ? "是 平衡树" : "不是 平衡树");
+    }
+
+    // Definition for a binary tree node.
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        int left = getHeight(root.left);
+        int right = getHeight(root.right);
+        return Math.abs(left - right) <= 1;
+    }
+
+    private int getHeight(TreeNode node) {
+        if (node == null) return 0;
+
+        int left = getHeight(node.left);
+        int right = getHeight(node.right);
+        if(Math.abs(left - right) > 1){
+            return Integer.MAX_VALUE;
+        }
+        return 1 + Math.max(left, right);
+    }
+
+    /**
+     * 给你一个字符串s，请你根据下面的算法重新构造字符串：
+     * <p>
+     * 从 s中选出 最小的字符，将它 接在结果字符串的后面。
+     * 从 s剩余字符中选出最小的字符，且该字符比上一个添加的字符大，将它 接在结果字符串后面。
+     * 重复步骤 2 ，直到你没法从 s中选择字符。
+     * 从 s中选出 最大的字符，将它 接在结果字符串的后面。
+     * 从 s剩余字符中选出最大的字符，且该字符比上一个添加的字符小，将它 接在结果字符串后面。
+     * 重复步骤 5，直到你没法从 s中选择字符。
+     * 重复步骤 1 到 6 ，直到 s中所有字符都已经被选过。
+     * 在任何一步中，如果最小或者最大字符不止一个，你可以选择其中任意一个，并将其添加到结果字符串。
+     * <p>
+     * 请你返回将s中字符重新排序后的 结果字符串 。
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/increasing-decreasing-string
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param s
+     * @return
+     */
+    public String sortString(String s) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        boolean asc = true;
+//        char current = 256;
+//        while (s.length() == 0) {
+//            if (asc) {//升
+//                char min = getMin(s, current);
+//                if (min == 0) {
+//                    asc = false;
+//                } else {
+//                    current = min;
+//                    stringBuilder.append(min);
+//                }
+//            } else {//降
+//
+//            }
+//        }
+//
+//
+//        return stringBuilder.toString();
+
+        StringBuilder builder = new StringBuilder();
+        int[] map = new int[26];
+        for (char c : s.toCharArray()) map[c - 'a']++;
+        boolean flag;
+        do {
+            flag = false;
+            for (int i = 0; i < 26; i++) {
+                if (map[i] > 0) {
+                    builder.append((char) (i + 'a'));
+                    map[i]--;
+                    flag = true;
+                }
+            }
+            for (int i = 25; i >= 0; i--) {
+                if (map[i] > 0) {
+                    builder.append((char) (i + 'a'));
+                    map[i]--;
+                    flag = true;
+                }
+            }
+        } while (flag);
+        return builder.toString();
+    }
+
+//    private char getMin(String s, char current) {
+//        char result = 0;
+//        for (int index = 0; index < s.length(); index++) {
+//            char c = s.charAt(index);
+//            if (c < current) {
+//                result = c;
+//            }
+//        }
+//        if (result != 0) {
+//            s.replaceFirst(result,'-');
+//        }
+//        return result;
+//    }
+//
+//    private char getMax(String s, char current) {
+//        char result = 0;
+//        for (int index = 0; index < s.length(); index++) {
+//            char c = s.charAt(index);
+//            if (c > current) {
+//                result = c;
+//            }
+//        }
+//        if (result != 0) {
+//
+//        }
+//        return result;
+//    }
+
 
     /**
      * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
@@ -49,7 +214,7 @@ public class SimpleTest {
     /**
      * 121. 买卖股票的最佳时机
      * <p>
-     * 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+     * 给定一个数组，它的第i 个元素是一支给定股票第 i 天的价格。
      * <p>
      * 如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。
      * <p>
@@ -95,7 +260,7 @@ public class SimpleTest {
     }
 
     /**
-     * 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
+     * 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10或11)来表示。
      * <p>
      * 现给一个由若干比特组成的字符串。问最后一个字符是否必定为一个一比特字符。给定的字符串总是由0结束。
      *
