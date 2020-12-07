@@ -1,8 +1,14 @@
 package com.annis.leetcode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 获得的总结
+ * 1.数组查找是有内存消耗的,尽可能的减少其使用
+ * 2.数组转换的操作是费时的
+ */
 public class SimpleTest {
     static SimpleTest simpleTest = new SimpleTest();
 
@@ -18,7 +24,203 @@ public class SimpleTest {
 //        System.out.println(simpleTest.add(1, 0));
 
 //        System.out.println(simpleTest.sortString("eabcddcba"));
-        simpleTest.treeNode();
+//        simpleTest.treeNode();
+
+//        System.out.println("各位数相加:" + simpleTest.addDigits(65));
+
+//        System.out.println("定位位置是:" + simpleTest.search(new int[]{62}, 62));
+//        System.out.println("定位位置是:" + simpleTest.search(new int[]{1, 12, 23, 31, 41, 52, 62, 75, 84, 91, 100, 110, 124, 132}, 62));
+
+//        System.out.println("替换结果:" + simpleTest.replaceSpace("new int array"));
+//        System.out.println("最小集合:" + simpleTest.getLeastNumbers(new int[]{1, 12, 23, 31, 41, 52, 62, 75, 84, 91, 100, 110, 124, 132}, 2));
+        System.out.println("最小集合:" + simpleTest.getLeastNumbers(new int[]{1, 2, 3}, 2));
+    }
+
+    /**
+     * 输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+     * <p>
+     * 执行用时： 7 ms , 在所有 Java 提交中击败了 70.69% 的用户
+     * 内存消耗： 40.2 MB , 在所有 Java 提交中击败了 32.31% 的用户
+     * <p>
+     * 7ms 太差了 , 应该 把排序的工作自己做
+     */
+    public int[] getLeastNumbers2(int[] arr, int k) {
+        int[] result = new int[k];
+        Arrays.sort(arr);
+        for (int i = 0; i < k; i++) {
+            result[i] = arr[i];
+        }
+        return result;
+    }
+
+    public int[] getLeastNumbers(int[] arr, int k) {
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+             result[i]=-1;
+        }
+        int max = Integer.MAX_VALUE;
+        int arrLength = arr.length;
+        for (int i = 0; i < arrLength; i++) {
+            if (arr[i] < max) {
+                max = insertArray(result, arr[i]);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 插入数组
+     *
+     * @param arr
+     * @param num
+     * @return 数组现在最大的数
+     */
+    private int insertArray(int[] arr, int num) {
+        int left = 0, right = arr.length - 1;
+        int current = (left + right) / 2;
+        //找位置
+        while (left < right) {
+            if (arr[current] == 0 || num < arr[current]) {
+                right = current - 1;
+            } else {
+                left = current + 1;
+            }
+        }
+        if (arr.length - current == 1) {
+            arr[arr.length - 1] = num;
+            return num;
+        }
+        //插入
+        int temp = num;
+        for (int i = current; i < arr.length - 2; i++) {
+            int s = arr[i];
+            arr[i] = temp;
+            temp = s;
+        }
+        arr[arr.length - 1] = temp;
+        return temp;
+    }
+
+    /**
+     * 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+     * <p>
+     * 执行用时： 0 ms , 在所有 Java 提交中击败了 100.00% 的用户
+     * 内存消耗： 36.2 MB , 在所有 Java 提交中击败了 95.03%  的用户
+     *
+     * @param s
+     * @return
+     */
+    public String replaceSpace2(String s) {
+        if (s == null) {
+            return null;
+        }
+        StringBuffer buffer = new StringBuffer();
+        int length = s.length();
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            buffer.append((c == ' ') ? "%20" : c);
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * 执行用时： 1 ms , 在所有 Java 提交中击败了 25.83% 的用户
+     * 内存消耗： 36.3 MB , 在所有 Java 提交中击败了 79.46% 的用户
+     * <p>
+     * -> 数组的转换是费时的
+     *
+     * @param s
+     * @return
+     */
+    public String replaceSpace(String s) {
+        if (s == null) {
+            return null;
+        }
+        StringBuffer buffer = new StringBuffer();
+        for (char c : s.toCharArray()) {
+            buffer.append((c == ' ') ? "%20" : c);
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * 执行用时： 3 ms , 在所有 Java 提交中击败了 12.76% 的用户
+     * 内存消耗： 36.5 MB , 在所有 Java 提交中击败了 52.17% 的用户
+     * <p>
+     * -> 数组的转换是费时的
+     *
+     * @param s
+     * @return
+     */
+    public String replaceSpace3(String s) {
+        return s.replace(" ", "%20");
+    }
+
+    /**
+     * 执行用时： 0 ms , 在所有 Java 提交中击败了 100.00% 的用户
+     * 内存消耗： 39.3 MB , 在所有 Java 提交中击败了 66.82%  的用户
+     * <p>
+     * ##### 数组查找是有内存消耗的,尽可能的减少其使用
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search2(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int next = (right + left) / 2;
+            int current = nums[next];
+            if (current == target) {
+                return next;
+            } else if (target < current) {
+                right = next - 1;
+            } else {
+                left = next + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 执行用时： 0 ms , 在所有 Java 提交中击败了 100.00% 的用户
+     * 内存消耗： 39.5 MB , 在所有 Java 提交中击败了 66.82%  的用户
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int next = (right + left) / 2;
+            if (nums[next] == target) {
+                return next;
+            } else if (target < nums[next]) {
+                right = next - 1;
+            } else {
+                left = next + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 执行用时： 2 ms , 在所有 Java 提交中击败了  14.16%  的用户
+     * 内存消耗： 35.5 MB , 在所有 Java 提交中击败了 83.76%  的用户
+     */
+    public int addDigits(int num) {
+        int current = 0;
+        while (num > 0) {
+            current += (num % 10);
+            num /= 10;
+        }
+        if (current > 9) {
+            current = addDigits(current);
+        }
+        return current;
+//        return (num - 1) % 9 + 1;
     }
 
     /**
@@ -65,23 +267,24 @@ public class SimpleTest {
         }
     }
 
+    /**
+     * 执行用时：  1 ms  , 在所有 Java 提交中击败了  99.80%  的用户
+     * 内存消耗：  38.5 MB  , 在所有 Java 提交中击败了 77.46% 的用户
+     */
     public boolean isBalanced(TreeNode root) {
         if (root == null) {
             return true;
         }
         int left = getHeight(root.left);
         int right = getHeight(root.right);
-        return Math.abs(left - right) <= 1;
+//        return Math.abs(left - right) <= 1 ;//之前这个居然没有想到 轮询就OK了   mmp
+        return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
     }
 
     private int getHeight(TreeNode node) {
         if (node == null) return 0;
-
         int left = getHeight(node.left);
         int right = getHeight(node.right);
-        if(Math.abs(left - right) > 1){
-            return Integer.MAX_VALUE;
-        }
         return 1 + Math.max(left, right);
     }
 
