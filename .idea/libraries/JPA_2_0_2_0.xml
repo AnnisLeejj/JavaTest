@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/javax.persistence.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="https://mvnrepository.com/artifact/com.google.code.gson/gson" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>
