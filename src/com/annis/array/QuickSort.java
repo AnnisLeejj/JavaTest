@@ -3,17 +3,15 @@ package com.annis.array;
 import java.util.Random;
 
 public class QuickSort {
-    static Random random;
 
-    public static <E extends Comparable<E>> void sort(E[] array) {
+    public static <E extends Comparable<E>> void sort(E[] array,Random random) {
         if (array == null) {
             return;
         }
-        if (random == null) random = new Random();
-        sort3Ways(array, 0, array.length - 1);
+        sort3Ways(array, 0, array.length - 1,random);
     }
 
-    private static <E extends Comparable<E>> void sort3Ways(E[] array, int l, int r) {
+    private static <E extends Comparable<E>> void sort3Ways(E[] array, int l, int r,Random random) {
         if (l >= r) {
             return;
         }
@@ -38,7 +36,7 @@ public class QuickSort {
         }
         ArrayUtil.swap(array, l, lr);
 
-        sort3Ways(array, l, lr - 1);
-        sort3Ways(array, rl, r);
+        sort3Ways(array, l, lr - 1,random);
+        sort3Ways(array, rl, r,random);
     }
 }
