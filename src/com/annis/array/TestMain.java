@@ -11,7 +11,6 @@ public class TestMain {
         testRandom(times,size,max);
         testOrder(times,size);
         testEqual(times, size);
-
     }
 
     private static void testRandom(int times, int size, int max) {

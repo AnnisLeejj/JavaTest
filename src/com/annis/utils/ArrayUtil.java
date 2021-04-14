@@ -1,4 +1,4 @@
-package com.annis.array;
+package com.annis.utils;
 
 public class ArrayUtil {
     public static String toString(Object[] array) {
