@@ -1,6 +1,14 @@
 package com.annis.utils;
 
 public class ArrayUtil {
+    public static String toString(int[] array) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < array.length; i++) {
+            buffer.append(i).append(":").append(array[i]).append("  - ");
+        }
+        return buffer.toString();
+    }
+
     public static String toString(Object[] array) {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < array.length; i++) {
