@@ -8,7 +8,115 @@ public class StringTest {
         //有效的字母异位词
         // isAnagramTest();
         //验证回文串
-        isPalindromeTest();
+        //isPalindromeTest();
+        //字符串转换整数
+        myAtoiTest();
+    }
+
+    /**
+     * 字符串转换整数 (atoi)
+     * 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。
+     * <p>
+     * 函数 myAtoi(string s) 的算法如下：
+     * <p>
+     * 读入字符串并丢弃无用的前导空格
+     * 检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+     * 读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+     * 将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+     * 如果整数数超过 32 位有符号整数范围 [−231,  231 − 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被固定为 −231 ，大于 231 − 1 的整数应该被固定为 231 − 1 。
+     * 返回整数作为最终结果。
+     * 注意：
+     * <p>
+     * 本题中的空白字符只包括空格字符 ' ' 。
+     * 除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符。
+     */
+    public static void myAtoiTest() {
+//        System.out.println(myAtoi("   -43"));
+//        System.out.println(myAtoi("words and 987"));
+//        System.out.println(myAtoi("1.2"));
+//        System.out.println(myAtoi("+-3.2"));
+//        System.out.println(myAtoi("42"));
+//        System.out.println(myAtoi("  -42"));
+//        System.out.println(myAtoi("9223372036854775808"));
+        System.out.println(myAtoi("-91283472332"));
+    }
+
+    public static int myAtoi(String s) {
+        boolean haveNum = false;
+        int sign = 0;
+        long num = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                num = num * 10 + (c - '0');
+                if (sign != 0) {
+                    num *= sign;
+                    sign =0;
+                }
+                haveNum = true;
+
+                if (num > 2147483647) return 2147483647;
+                if (num < -2147483648) return -2147483648;
+            } else {
+                if (haveNum) {
+                    break;
+                }
+                if (' ' == c) continue;
+                if ('-' == c) {
+                    sign = -1;
+                    haveNum = true;
+                } else if ('+' == c) {
+                    sign = 1;
+                    haveNum = true;
+                } else {
+                    break;
+                }
+            }
+        }
+        if (!haveNum) return 0;
+        return (int) num;
+    }
+
+    public static int myAtoi2(String s) {
+        char[] chars = s.toCharArray();
+        int length = chars.length;
+        int index = 0;
+        // 先去除空格
+        while (index < length && chars[index] == ' ') {
+            index++;
+        }
+        // 极端情况 "  " 和""
+        if (index >= length) {
+            return 0;
+        }
+        // 再判断符号
+        int sign = 1;
+        if (chars[index] == '-' || chars[index] == '+') {
+            if (chars[index] == '-') {
+                sign = -1;
+            }
+            index++;
+        }
+        int result = 0;
+        int temp = 0;
+        while (index < length) {
+            int num = chars[index] - '0';
+            if (num > 9 || num < 0) {
+                break;
+            }
+            temp = result;
+            result = result * 10 + num;
+            // 越界后，数值和期望数值发生变化，取余再除10获取原始值，比对判断
+            if (result / 10 != temp) {
+                if (sign > 0) {
+                    return Integer.MAX_VALUE;
+                } else {
+                    return Integer.MIN_VALUE;
+                }
+            }
+            index++;
+        }
+        return result * sign;
     }
 
     public static void isPalindromeTest() {
@@ -27,7 +135,11 @@ public class StringTest {
      * <p>
      * 说明：本题中，我们将空字符串定义为有效的回文串。
      */
-    public static boolean isPalindrome3(String s) {
+    /*
+    执行用时：3 ms, 在所有 Java 提交中击败了93.52%的用户
+    内存消耗：38.7 MB, 在所有 Java 提交中击败了23.60%的用户
+     */
+    public static boolean isPalindrome4(String s) {
         char[] chars = s.toCharArray();
         int ss = 0, st = s.length() - 1;
 
@@ -46,6 +158,32 @@ public class StringTest {
             }
             ss++;
             st--;
+        }
+        return true;
+    }
+
+    /*执行用时：4 ms, 在所有 Java 提交中击败了64.65%的用户
+    内存消耗：38.3 MB, 在所有 Java 提交中击败了88.05%的用户*/
+    public static boolean isPalindrome3(String s) {
+        s = s.toUpperCase();
+        char[] chars = s.toCharArray();
+        int ss = 0, st = s.length() - 1;
+        while (ss < st) {
+            char c = chars[ss];
+            if (Character.isLetterOrDigit(c)) {
+                char c2 = chars[st];
+                if (Character.isLetterOrDigit(c2)) {
+                    if (c != c2) return false;
+                    else {
+                        ss++;
+                        st--;
+                    }
+                } else {
+                    st--;
+                }
+            } else {
+                ss++;
+            }
         }
         return true;
     }
