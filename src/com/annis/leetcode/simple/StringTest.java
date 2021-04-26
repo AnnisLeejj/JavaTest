@@ -10,7 +10,149 @@ public class StringTest {
         //验证回文串
         //isPalindromeTest();
         //字符串转换整数
-        myAtoiTest();
+        //myAtoiTest();
+        //实现 strStr()
+        strStrTest();
+    }
+
+    public static void strStrTest() {
+        System.out.println(strStr("abcdefghijklmn", ""));
+    }
+
+    /**
+     * 实现 strStr()
+     * 实现 strStr() 函数。
+     * <p>
+     * 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。
+     * <p>
+     *  
+     * <p>
+     * 说明：
+     * <p>
+     * 当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
+     * <p>
+     * 对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与 C 语言的 strstr() 以及 Java 的 indexOf() 定义相符。
+     */
+    /*
+    执行用时：4 ms, 在所有 Java 提交中击败了30.31%的
+    用户存消耗：36.9 MB, 在所有 Java 提交中击败了79.89%的用户
+     */
+    public static int strStr5(String haystack, String needle) {
+        if (haystack == null) return -1;
+        if ("".equals(needle)) return 0;
+        int index = 0;
+        while (index <= haystack.length() - needle.length()) {
+            int force = index;
+            int cIndex = 0;
+            while (force < haystack.length() && cIndex < needle.length() && haystack.charAt(force) == needle.charAt(cIndex)) {
+                cIndex++;
+                force++;
+            }
+
+            if (cIndex == needle.length()) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+    /*
+    执行用时:1 ms, 在所有 Java 提交中击败了73.84%的用户
+    内存消耗：38.6 MB, 在所有 Java 提交中击败了11.63%的用户
+     */
+    public static int strStr4(String haystack, String needle) {
+        if (haystack == null) return -1;
+        if ("".equals(needle)) return 0;
+        char[] chars = haystack.toCharArray();
+        char[] needles = needle.toCharArray();
+        int index = 0;
+        while (index <= chars.length - needles.length) {
+            int force = index;
+            int cIndex = 0;
+            while (force < chars.length && cIndex < needles.length && chars[force] == needles[cIndex]) {
+                cIndex++;
+                force++;
+            }
+
+            if (cIndex == needles.length) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    /*
+    执行用时：681 ms, 在所有 Java 提交中击败了5.05%的用户
+    内存消耗：38.6 MB, 在所有 Java 提交中击败了18.33%的用户
+     */
+    public static int strStr3(String haystack, String needle) {
+        if (haystack == null) return -1;
+        if ("".equals(needle)) return 0;
+        char[] chars = haystack.toCharArray();
+        char[] needles = needle.toCharArray();
+        int index = 0;
+        while (index < chars.length) {
+            int force = index;
+            int cIndex = 0;
+            while (force < chars.length && cIndex < needles.length && chars[force] == needles[cIndex]) {
+                cIndex++;
+                force++;
+            }
+
+            if (cIndex == needles.length) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    /*
+    执行用时：1338 ms, 在所有 Java 提交中击败了5.05%的用户
+    内存消耗：38.5 MB, 在所有 Java 提交中击败了28.69%的用户
+     */
+    public static int strStr2(String haystack, String needle) {
+        if (haystack == null) return -1;
+        if ("".equals(needle)) return 0;
+        char[] chars = haystack.toCharArray();
+        char[] needles = needle.toCharArray();
+        int index = 0;
+        while (index < haystack.length()) {
+            int force = index;
+            int cIndex = 0;
+            while (force < haystack.length() && cIndex < needle.length() && chars[force] == needles[cIndex]) {
+                cIndex++;
+                force++;
+            }
+
+            if (cIndex == needle.length()) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    //超出时间限制
+    public static int strStr1(String haystack, String needle) {
+        if (haystack == null) return -1;
+        if ("".equals(needle)) return 0;
+        int index = 0;
+        while (index < haystack.length()) {
+            int force = index;
+            int cIndex = 0;
+            while (force < haystack.length() && cIndex < needle.length() && haystack.charAt(force) == needle.charAt(cIndex)) {
+                cIndex++;
+                force++;
+            }
+
+            if (cIndex == needle.length()) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 
     /**
@@ -36,9 +178,9 @@ public class StringTest {
 //        System.out.println(myAtoi("1.2"));
 //        System.out.println(myAtoi("+-3.2"));
 //        System.out.println(myAtoi("42"));
-//        System.out.println(myAtoi("  -42"));
+        System.out.println(myAtoi("  -42"));
 //        System.out.println(myAtoi("9223372036854775808"));
-        System.out.println(myAtoi("-91283472332"));
+//        System.out.println(myAtoi("-91283472332"));
     }
 
     public static int myAtoi(String s) {
@@ -48,11 +190,10 @@ public class StringTest {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isDigit(c)) {
-                num = num * 10 + (c - '0');
-                if (sign != 0) {
-                    num *= sign;
-                    sign =0;
+                if (sign == 0) {
+                    sign = 1;
                 }
+                num = num * 10 + (c - '0') * sign;
                 haveNum = true;
 
                 if (num > 2147483647) return 2147483647;
