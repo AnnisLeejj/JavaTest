@@ -16,7 +16,7 @@ public class StringTest {
     }
 
     public static void strStrTest() {
-        System.out.println(strStr("abcdefghijklmn", ""));
+        System.out.println(strStr4("abcdefghijklmn", ""));
     }
 
     /**
