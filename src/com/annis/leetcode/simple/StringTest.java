@@ -12,7 +12,227 @@ public class StringTest {
         //字符串转换整数
         //myAtoiTest();
         //实现 strStr()
-        strStrTest();
+//        strStrTest();
+        //外观数列
+        countAndSayTest();
+    }
+
+    /**
+     * 外观数列
+     * 给定一个正整数 n ，输出外观数列的第 n 项。
+     * <p>
+     * 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。
+     * <p>
+     * 你可以将其视作是由递归公式定义的数字字符串序列：
+     * <p>
+     * countAndSay(1) = "1"
+     * countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。
+     * 前五项如下：
+     * <p>
+     * 1.     1
+     * 2.     11
+     * 3.     21
+     * 4.     1211
+     * 5.     111221
+     * 第一项是数字 1
+     * 描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 "11"
+     * 描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 "21"
+     * 描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 "1211"
+     * 描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
+     */
+    public static void countAndSayTest() {
+//        System.out.println("外观数列:" + countAndSay(1));
+//        System.out.println("外观数列:" + countAndSay(2));
+//        System.out.println("外观数列:" + countAndSay(3));
+//        System.out.println("外观数列:" + countAndSay(4));
+//        System.out.println("外观数列:" + countAndSay(5));
+        for (int i = 1; i < 10; i++) {
+            System.out.println("外观数列(" + i + "):" + countAndSay5(i));
+        }
+    }
+    /*执行用时：1 ms, 在所有 Java 提交中击败了97.78%的用户
+    内存消耗：35.9 MB, 在所有 Java 提交中击败了87.11%的用户*/
+    public static String countAndSay5(int n) {
+        String res = "1";
+        for (int i = 0; i < n; i++) {
+            res = say(res);
+        }
+        return res;
+    }
+    /*执行用时：1 ms, 在所有 Java 提交中击败了97.78%的用户
+       内存消耗：35.9 MB, 在所有 Java 提交中击败了87.11%的用户*/
+    private static String say(String s) {
+        if (s.equals("1")) {
+            return "1";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        int n = s.length();
+        int cnt = 1;
+        char cur = s.charAt(0);
+        for (int i = 1; i < n; i++) {
+            if (cur == s.charAt(i)) {
+                cnt++;
+            } else {
+                sb.append((char)('0' + cnt));
+                sb.append(cur);
+                cur = s.charAt(i);
+                cnt = 1;
+            }
+        }
+
+        sb.append((char)('0' + cnt));
+        sb.append(cur);
+
+        return sb.toString();
+    }
+
+    /*执行用时：6 ms, 在所有 Java 提交中击败了44.66%的用户
+    内存消耗：35.9 MB, 在所有 Java 提交中击败了87.51%的用户*/
+    public static String countAndSay4(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        int i = 2;
+        StringBuilder buffer = new StringBuilder("1");
+        int readStartIndex ;
+        int lastLength = 0;
+
+        char c = 0;
+        int count = 0;
+        while (i <= n) {
+            readStartIndex = lastLength;
+            lastLength = buffer.length();
+            for (int index = readStartIndex; index < lastLength; index++) {
+                char ci = buffer.charAt(index);
+                if (ci == c) {
+                    count += 1;
+                } else {
+                    if (c != 0) {
+                        buffer.append(count).append(c);
+                    }
+                    c = ci;
+                    count = 1;
+                }
+            }
+            buffer.append(count).append(c);
+
+            count = 0;
+            c = 0;
+            i++;
+        }
+        return buffer.substring(lastLength);
+    }
+
+    /*
+    执行用时：7 ms, 在所有 Java 提交中击败了41.73%的用户
+    内存消耗：36.1 MB, 在所有 Java 提交中击败了67.29%的用户
+     */
+    public String countAndSay3(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        int i = 2;
+        StringBuffer last = new StringBuffer("1");
+
+        char c = 0;
+        int count = 0;
+        while (i <= n) {
+            StringBuffer buffer = new StringBuffer();
+            for (int index = 0; index < last.length(); index++) {
+                char ci = last.charAt(index);
+                if (ci == c) {
+                    count += 1;
+                } else {
+                    if (c != 0) {
+                        buffer.append(count).append(c);
+                    }
+                    c = ci;
+                    count = 1;
+                }
+            }
+            buffer.append(count).append(c);
+            last = buffer;
+
+            count = 0;
+            c = 0;
+            i++;
+        }
+        return last.toString();
+    }
+
+    /*执行用时：6 ms, 在所有 Java 提交中击败了44.66%的用户
+    内存消耗：36 MB, 在所有 Java 提交中击败了76.81%的用户*/
+    public static String countAndSay2(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        int i = 2;
+        String last = "1";
+
+        char c = 0;
+        int count = 0;
+        while (i <= n) {
+            StringBuffer buffer = new StringBuffer();
+            for (int index = 0; index < last.length(); index++) {
+                char ci = last.charAt(index);
+                if (ci == c) {
+                    count += 1;
+                } else {
+                    if (c != 0) {
+                        buffer.append(count).append(c);
+                    }
+                    c = ci;
+                    count = 1;
+                }
+            }
+            buffer.append(count).append(c);
+            last = buffer.toString();
+
+            count = 0;
+            c = 0;
+            i++;
+        }
+        return last;
+    }
+
+    /*int 的越界,让这个函数局限性太大了
+     */
+    public static String countAndSay1(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        int i = 2;
+        String last = "1";
+        while (i <= n) {
+            int num = Integer.parseInt(last);
+            last = readNum1(num);
+            i++;
+        }
+        return last;
+    }
+
+    /*int 的越界,让这个函数局限性太大了
+     */
+    private static String readNum1(int n) {
+        StringBuffer buffer = new StringBuffer();
+        int count = 0;
+        int num = -1;
+        while (n > 0) {
+            int c = n % 10;
+            if (num == c) {
+                count += 1;
+            } else {
+                if (num != -1) {
+                    buffer.append(num).append(count);
+                }
+                num = c;
+                count = 1;
+            }
+            n = n / 10;
+        }
+        buffer.append(num).append(count);
+        return buffer.reverse().toString();
     }
 
     public static void strStrTest() {
@@ -56,6 +276,7 @@ public class StringTest {
         }
         return -1;
     }
+
     /*
     执行用时:1 ms, 在所有 Java 提交中击败了73.84%的用户
     内存消耗：38.6 MB, 在所有 Java 提交中击败了11.63%的用户
