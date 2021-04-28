@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class StringTest {
+
     public static void main(String[] args) {
+        StringTest test = new StringTest();
         //有效的字母异位词
         // isAnagramTest();
         //验证回文串
@@ -14,7 +16,102 @@ public class StringTest {
         //实现 strStr()
 //        strStrTest();
         //外观数列
-        countAndSayTest();
+        //test.countAndSayTest();
+        // 最长公共前缀
+        test.longestCommonPrefixTest();
+    }
+
+    /**
+     * 最长公共前缀
+     * 编写一个函数来查找字符串数组中的最长公共前缀。
+     * <p>
+     * 如果不存在公共前缀，返回空字符串 ""。
+     * <p>
+     * 示例 1：
+     * <p>
+     * 输入：strs = ["flower","flow","flight"]
+     * 输出："fl"
+     * 示例 2：
+     * <p>
+     * 输入：strs = ["dog","racecar","car"]
+     * 输出：""
+     * 解释：输入不存在公共前缀。
+     */
+    public void longestCommonPrefixTest() {
+        System.out.println("最长公共前缀:" + longestCommonPrefix2(new String[]{"flower", "flow", "flight"}));
+    }
+
+    //TODO StringBuffer     更快 更费空间
+    //TODO StringBuilder    慢一点 省空间
+    /*
+        一个char  一个char 对比
+       执行用时：1 ms, 在所有 Java 提交中击败了84.59%的用户
+       内存消耗：36.7 MB, 在所有 Java 提交中击败了24.95%的用户
+         */
+    public String longestCommonPrefix3(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        StringBuffer builder = new StringBuffer();
+        String str0 = strs[0];
+        for (int i = 0; i < str0.length(); i++) {
+            char c = str0.charAt(i);
+            for (int j = 1; j < strs.length; j++) {
+                String str = strs[j];
+                if (i >= str.length() || str.charAt(i) != c) {
+                    return builder.toString();
+                }
+            }
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+    /*
+    一个char  一个char 对比
+    执行用时：2 ms, 在所有 Java 提交中击败了30.27%的用户
+    内存消耗：36.5 MB, 在所有 Java 提交中击败了56.08%的用户
+     */
+    public String longestCommonPrefix2(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        String str0 = strs[0];
+        for (int i = 0; i < str0.length(); i++) {
+            char c = str0.charAt(i);
+            for (int j = 1; j < strs.length; j++) {
+                String str = strs[j];
+                if (i >= str.length() || str.charAt(i) != c) {
+                    return builder.toString();
+                }
+            }
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+    /*
+    一个一个字符串对比
+    执行用时：3 ms, 在所有 Java 提交中击败了20.11%的用户
+    内存消耗：37.9 MB, 在所有 Java 提交中击败了15.40%的用户
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        String result = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            String current = strs[i];
+            StringBuilder builder = new StringBuilder();
+            for (int j = 0; j < Math.min(result.length(), current.length()); j++) {
+                if (result.charAt(j) == current.charAt(j)) builder.append(result.charAt(j));
+                else break;
+            }
+            result = builder.toString();
+            if ("".equals(result)) break;
+        }
+        return result;
     }
 
     /**
@@ -40,32 +137,111 @@ public class StringTest {
      * 描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 "1211"
      * 描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
      */
-    public static void countAndSayTest() {
-//        System.out.println("外观数列:" + countAndSay(1));
-//        System.out.println("外观数列:" + countAndSay(2));
-//        System.out.println("外观数列:" + countAndSay(3));
-//        System.out.println("外观数列:" + countAndSay(4));
-//        System.out.println("外观数列:" + countAndSay(5));
-        for (int i = 1; i < 10; i++) {
-            System.out.println("外观数列(" + i + "):" + countAndSay5(i));
+    public void countAndSayTest() {
+//        for (int i = 1; i < 20; i++) {
+//            System.out.println("外观数列(" + i + ")次耗时:" + countAndSay7(i));
+//        }
+//        System.out.println("外观数列(" + 2 + ")次耗时:" + countAndSay7(2));
+
+        int count = 100;
+        long startALl = System.nanoTime();
+        for (int i = 0; i < count; i++) {
+            countAndSayTest2();
+        }
+        long endAll = System.nanoTime() - startALl;
+        System.out.println("外观数列(" + count + ")次耗时:" + endAll + "纳秒,平均:" + (endAll / count) + "纳秒");
+
+        //外观数列(100)次耗时:63011793纳秒,平均:630117纳秒
+        //外观数列(100)次耗时:106107760纳秒,平均:1061077纳秒
+
+        //外观数列(100)次耗时:56473086纳秒,平均:564730纳秒
+        //外观数列(100)次耗时:88195298纳秒,平均:881952纳秒
+        //外观数列(100)次耗时:58068338纳秒,平均:580683纳秒
+
+        //外观数列(100)次耗时:68074962纳秒,平均:680749纳秒
+        //外观数列(100)次耗时:56756585纳秒,平均:567565纳秒
+        //外观数列(100)次耗时:69922979纳秒,平均:699229纳秒
+    }
+
+    public void countAndSayTest2() {
+        for (int i = 1; i < 20; i++) {
+            countAndSay7(i);
         }
     }
+
+    /*
+    执行用时：5 ms, 在所有 Java 提交中击败了46.43%的用户
+    内存消耗：35.8 MB, 在所有 Java 提交中击败了93.75%的用户
+     */
+    public String countAndSay7(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        int i = 2;
+        StringBuilder buffer = new StringBuilder("1");
+        while (i <= n) {
+            char c = 0;
+            int count = 0;
+            int lastLength = buffer.length();
+            for (int index = 0; index < lastLength; index++) {
+                char ci = buffer.charAt(index);
+                if (ci == c) {
+                    count += 1;
+                } else {
+                    if (count > 0) {
+                        buffer.append(count).append(c);
+                    }
+                    c = ci;
+                    count = 1;
+                }
+            }
+            buffer.append(count).append(c);
+            buffer.delete(0, lastLength);
+            i++;
+        }
+        return buffer.toString();
+    }
+
+    /*执行用时：6 ms, 在所有 Java 提交中击败了44.66%的用户
+    内存消耗：35.9 MB, 在所有 Java 提交中击败了87.51%的用户*/
+    public String countAndSay6(int n) {
+        if (n == 1) {
+            return "1";
+        }
+        String result = "1";
+        for (int i = 2; i <= n; i++) {
+            StringBuilder sb = new StringBuilder();
+            char c = result.charAt(0);
+            int count = 0;
+            for (int ic = 0; ic < result.length(); ic++) {
+                if (c == result.charAt(ic)) {
+                    count++;
+                } else {
+                    sb.append(count).append(c);
+                    c = result.charAt(ic);
+                    count = 1;
+                }
+            }
+            sb.append(count).append(c);
+            result = sb.toString();
+        }
+        return result;
+    }
+
     /*执行用时：1 ms, 在所有 Java 提交中击败了97.78%的用户
     内存消耗：35.9 MB, 在所有 Java 提交中击败了87.11%的用户*/
-    public static String countAndSay5(int n) {
-        String res = "1";
+    public String countAndSay5(int n) {
+        String res = new String("");
         for (int i = 0; i < n; i++) {
             res = say(res);
         }
         return res;
     }
-    /*执行用时：1 ms, 在所有 Java 提交中击败了97.78%的用户
-       内存消耗：35.9 MB, 在所有 Java 提交中击败了87.11%的用户*/
-    private static String say(String s) {
-        if (s.equals("1")) {
+
+    private String say(String s) {
+        if (s.equals("")) {
             return "1";
         }
-
         StringBuilder sb = new StringBuilder();
         int n = s.length();
         int cnt = 1;
@@ -74,16 +250,14 @@ public class StringTest {
             if (cur == s.charAt(i)) {
                 cnt++;
             } else {
-                sb.append((char)('0' + cnt));
+                sb.append((char) ('0' + cnt));
                 sb.append(cur);
                 cur = s.charAt(i);
                 cnt = 1;
             }
         }
-
-        sb.append((char)('0' + cnt));
+        sb.append((char) ('0' + cnt));
         sb.append(cur);
-
         return sb.toString();
     }
 
@@ -95,7 +269,7 @@ public class StringTest {
         }
         int i = 2;
         StringBuilder buffer = new StringBuilder("1");
-        int readStartIndex ;
+        int readStartIndex;
         int lastLength = 0;
 
         char c = 0;
