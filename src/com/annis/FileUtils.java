@@ -12,7 +12,7 @@ public class FileUtils {
 
         String oldName = "[Dmz社区 DmzSheQu.Com]";
         String newName = "";
-        utils.changeFileName(new File("/Volumes/编程.学习/开发/视频教程/Android/37、BAT大咖助力 全面升级Android面试"), true, oldName, newName);
+        utils.changeFileName(new File("/Volumes/infomation/教程/android/BAT大咖助力 全面升级Android面试"), true, oldName, newName);
     }
 
     public void changeFileName(File file, boolean changeDirectory, String oldChar, String newChar) {

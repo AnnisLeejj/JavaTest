@@ -25,7 +25,29 @@ public class ArrayTest {
 
         //有效的数独
         //isValidSudokuTest();
+        //二分查找法
+        halfFind();
+    }
 
+    public static void halfFind() {
+        int[] array = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        System.out.println(find(array, 5));
+    }
+
+    //二分查找法
+    public static int find(int[] array, int number) {
+        int start = 0, end = array.length - 1;
+        while (start <= end) {
+            int mod = start + (end - start) / 2;
+            if(number==array[mod]){
+                return mod;
+            }else if(number<array[mod]){
+                end = mod-1;
+            }else  {
+                start = mod+1;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -39,7 +61,7 @@ public class ArrayTest {
     public int firstUniqChar2(String s) {
         int[] words = new int[26];
         char[] chars = s.toCharArray();
-        for (int i = 0; i < chars.length ; i++) {
+        for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             words[c - 'a'] += 1;
         }
@@ -49,6 +71,7 @@ public class ArrayTest {
         }
         return -1;
     }
+
     /*
     执行用时：8 ms, 在所有 Java 提交中击败了75.84%的用户
     内存消耗：38.6 MB, 在所有 Java 提交中击败了96.33%的用户
