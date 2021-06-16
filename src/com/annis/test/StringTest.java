@@ -1,4 +1,4 @@
-package com.annis;
+package com.annis.test;
 
 import java.util.List;
 import java.util.ListIterator;

@@ -1,4 +1,4 @@
-package com.annis;
+package com.annis.test;
 
 import java.net.URI;
 

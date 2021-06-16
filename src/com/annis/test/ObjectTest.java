@@ -1,4 +1,4 @@
-package com.annis;
+package com.annis.test;
 
 public class ObjectTest {
     public static void main(String[] args) {
