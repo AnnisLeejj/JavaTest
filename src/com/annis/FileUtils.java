@@ -10,9 +10,9 @@ public class FileUtils {
     public static void main(String[] args) {
         utils = new FileUtils();
 
-        String oldName = "[Dmz社区 DmzSheQu.Com]";
+        String oldName = "【更多IT资源 www.cong0sousuo.top】";
         String newName = "";
-        utils.changeFileName(new File("/Volumes/infomation/教程/android/BAT大咖助力 全面升级Android面试"), true, oldName, newName);
+        utils.changeFileName(new File("/Volumes/SUB/移动端架构师"), true, oldName, newName);
     }
 
     public void changeFileName(File file, boolean changeDirectory, String oldChar, String newChar) {
