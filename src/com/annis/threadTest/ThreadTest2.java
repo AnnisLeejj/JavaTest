@@ -9,15 +9,7 @@ public class ThreadTest2 {
 
     public void test1() {
         Counter counter = new Counter();
-//        Thread thread1 = new Thread(() -> {
-//            counter.setCount(1);
-//            try {
-//                counter.wait();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();//current thread is not owner
-//            }
-//            System.out.println("结果:" + counter.getCount());
-//        });
+
         Thread thread1 = new Thread(() -> {
             synchronized (counter) {
                 counter.setCount(1);
