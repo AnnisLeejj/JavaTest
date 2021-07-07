@@ -3,6 +3,18 @@ package com.annis.threadTest.lock;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 支持 读写相互可以 重入的锁设计
+ * <p>
+ * 规范使用 读/写 同理:
+ * try{
+ *      {@link ReadWriteLock3#lockRead()}
+ *      ...your codes
+ * }finally{
+ *      //在finally中保证一定能释放锁
+ *      {@link ReadWriteLock3#unlockRead()}
+ * }
+ */
 public class ReadWriteLock3 {
     /**
      * 读线程的记录,以及每个读线程的重入次数
@@ -71,29 +83,35 @@ public class ReadWriteLock3 {
 
     /**
      * 判断当前线程是不是可以读
-     * 优先写
+     * 在读里面   优先写
      */
     private boolean canGrantReadAccess(Thread callingThread) {
-        //判断这个线程是写线程  -> 可入
+        //判断这个线程是写线程  -> 重入
         if (isWriter(callingThread)) return true;
         //自己不是写线程,且有写线程 -> 不可入
         if (hasWriter()) return false;
-        //自己已经是读线程 ->允许重入
+        //自己已经是读线程 -> 重入
         if (isReader(callingThread)) return true;
         //自己不还不是读线程,并且有写请求   -> 不可入
         if (hasWriteRequests()) return false;
-        //
+        //1.自己不是写线程  2.没有写线程  3.自己不是读线程  4.没有写请求   -> 进入
         return true;
     }
 
     /**
      * 判断当前线程是不是可以写
+     * 在写里面   读优先
      */
     private boolean canGrantWriteAccess(Thread callingThread) {
+        //自己是唯一的读者  ->重入
         if (isOnlyReader(callingThread)) return true;
+        //有其他读者     -> 不可入
         if (hasReaders()) return false;
-        if (writingThread == null) return true;
+        //没有写 者      ->可入
+        if (!hasWriter()) return true;
+        //有写 者 ,但不是自己   ->不可入
         if (!isWriter(callingThread)) return false;
+        //有写 者 ,是自己   -> 重入
         return true;
     }
 
@@ -116,8 +134,7 @@ public class ReadWriteLock3 {
     }
 
     private boolean isOnlyReader(Thread callingThread) {
-        return readingThreads.size() == 1 &&
-                readingThreads.get(callingThread) != null;
+        return readingThreads.size() == 1 && readingThreads.get(callingThread) != null;
     }
 
     private boolean hasWriter() {
