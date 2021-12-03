@@ -12,7 +12,7 @@ public class FileUtils {
 
         String oldName = "【更多IT资源 www.cong0sousuo.top】";
         String newName = "";
-        utils.changeFileName(new File("/Volumes/SUB/移动端架构师"), true, oldName, newName);
+        utils.changeFileName(new File("/Volumes/MAC_DATA/移动端架构师"), true, oldName, newName);
     }
 
     public void changeFileName(File file, boolean changeDirectory, String oldChar, String newChar) {
