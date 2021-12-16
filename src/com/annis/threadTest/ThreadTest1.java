@@ -94,12 +94,7 @@ public class ThreadTest1 {
 
     private void ThreadLocalTest() {
         ThreadLocal<String> threadLocal = new ThreadLocal<>();
-        ThreadLocal<String> threadLocal2 = new ThreadLocal<>() {
-            @Override
-            protected String initialValue() {
-                return "fork value";
-            }
-        };
+        ThreadLocal<String> threadLocal2 = ThreadLocal.withInitial(() -> "fork value");
 
         ThreadLocal<String> threadLocal1 = ThreadLocal.withInitial(() -> "fork value");
 
